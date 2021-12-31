@@ -2,7 +2,7 @@
 using namespace std;
 #define fo(i,n)             for (int i=0; i<n; i++)
 #define FO(i,j,n)           for (int i=j ; i<n ; i++)
-#define rfo(i,n)            for (int i=0 ; i>=n ; i--)
+#define rfo(i,n)            for (int i=n-1 ; i>=0 ; i--)
 #define RFO(i,j,n)          for (int i=j; i>=n; i--)
 #define foit(it, x)         for (auto it = x.begin(); it != x.end(); it++)
 #define foa(x, a)           for (auto x: a)
@@ -25,31 +25,39 @@ typedef vector<string>      vs;
 typedef map<int, int>       mii;
 
 void solve(){
-    int arr[9];
-    fo(i, 9) ci(arr[i]);
+    int n;
+    ci(n);
 
-    int possible[8][9] = {
-        {4, 3, 8, 9, 5, 1, 2, 7, 6},
-        {8, 3, 4, 1, 5, 9, 6, 7, 2},
-        {8, 1, 6, 3, 5, 7, 4, 9, 2},
-        {4, 9, 2, 3, 5, 7, 8, 1, 6},
-        {2, 7, 6, 9, 5, 1, 4, 3, 8},
-        {6, 7, 2, 1, 5, 9, 8, 3, 4},
-        {6, 1, 8, 7, 5, 3, 2, 9, 4},
-        {2, 9, 4, 7, 5, 3, 6, 1, 8}
-    };
+    vi arr;
+    cav(arr, n);
 
-    int mincost = 1000, cost;
+    if (is_sorted(all(arr))){ cout << "yes"; return; } 
 
-    fo(i, 8){
-        cost = 0;
-        fo(j, 9){
-            cost += abs(possible[i][j]-arr[j]);
+    int left=-1, right=-1;
+    fo(i, n-1){
+        if (arr[i] > arr[i+1]){
+            left = i;
+            break;
         }
-        mincost = min(mincost, cost);
+    }
+    RFO(i, n-1, 1){
+        if (arr[i]<arr[i-1]){
+            right = i;
+            break;
+        }
     }
 
-    cout << mincost;
+    int temp = arr[left];
+    arr[left] = arr[right];
+    arr[right] = temp;
+
+    if (is_sorted(all(arr))){ cout << "yes\nswap " << left+1 << " " << right+1; return; }
+
+    reverse(arr.begin()+left+1, arr.begin()+right);
+
+    if (is_sorted(all(arr))){ cout << "yes\nreverse " << left+1 << " " << right+1; return; }
+    cout << "no";
+
 }
 
 int main(){

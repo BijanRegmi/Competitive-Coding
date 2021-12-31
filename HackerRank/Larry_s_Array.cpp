@@ -25,39 +25,26 @@ typedef vector<string>      vs;
 typedef map<int, int>       mii;
 
 void solve(){
-    int arr[9];
-    fo(i, 9) ci(arr[i]);
+    int n;
+    ci(n);
 
-    int possible[8][9] = {
-        {4, 3, 8, 9, 5, 1, 2, 7, 6},
-        {8, 3, 4, 1, 5, 9, 6, 7, 2},
-        {8, 1, 6, 3, 5, 7, 4, 9, 2},
-        {4, 9, 2, 3, 5, 7, 8, 1, 6},
-        {2, 7, 6, 9, 5, 1, 4, 3, 8},
-        {6, 7, 2, 1, 5, 9, 8, 3, 4},
-        {6, 1, 8, 7, 5, 3, 2, 9, 4},
-        {2, 9, 4, 7, 5, 3, 6, 1, 8}
-    };
+    int arr[n];
+    caa(arr, n);
 
-    int mincost = 1000, cost;
-
-    fo(i, 8){
-        cost = 0;
-        fo(j, 9){
-            cost += abs(possible[i][j]-arr[j]);
-        }
-        mincost = min(mincost, cost);
-    }
-
-    cout << mincost;
+    int inversions=0;
+    fo(i, n) FO(j, i+1, n) inversions+=(arr[i]>arr[j]);
+    // Our rotation of 3 elements has an inversion of 2
+    // so the total inversions in given array also must be multiple of 2(i.e divisible by 2)
+    if (inversions%2) cout << "NO"; else cout << "YES";
 }
 
 int main(){
-    bool testcase = false;
+    bool testcase = true;
     int t = 1;
     if (testcase) cin >> t;
 
     while(t--){
         solve();
+        cout << endl;
     }
 }
