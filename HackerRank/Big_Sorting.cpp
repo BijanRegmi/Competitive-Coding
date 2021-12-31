@@ -9,6 +9,7 @@ using namespace std;
 #define deb(x)              cout << #x << ": " << x << std::endl;
 #define debb(x, y)          cout << #x << ": " << x << "  " << #y << ": " << y << std::endl;
 #define debarr(x)           cout << #x << "["; for(auto a: x) cout << " " << a; cout << " ]" << endl;
+#define priarr(obj)         foa(x, obj) cout << x << endl;
 #define ci(x)               cin >> x;
 #define cav(a, n)           fo(i, n){int x; cin >> x; a.push_back(x);}
 #define caa(a, n)           fo(i, n){int x; cin >> x; a[i] = x;}
@@ -24,32 +25,24 @@ typedef vector<pii>         vpii;
 typedef vector<string>      vs;
 typedef map<int, int>       mii;
 
+bool compare(string first, string second){
+    int fn = first.size(), sn = second.size();
+    if (sn==fn) return first<second;
+    else return fn<sn;
+}
+
 void solve(){
-    int arr[9];
-    fo(i, 9) ci(arr[i]);
+    int n;
+    ci(n);
 
-    int possible[8][9] = {
-        {4, 3, 8, 9, 5, 1, 2, 7, 6},
-        {8, 3, 4, 1, 5, 9, 6, 7, 2},
-        {8, 1, 6, 3, 5, 7, 4, 9, 2},
-        {4, 9, 2, 3, 5, 7, 8, 1, 6},
-        {2, 7, 6, 9, 5, 1, 4, 3, 8},
-        {6, 7, 2, 1, 5, 9, 8, 3, 4},
-        {6, 1, 8, 7, 5, 3, 2, 9, 4},
-        {2, 9, 4, 7, 5, 3, 6, 1, 8}
-    };
-
-    int mincost = 1000, cost;
-
-    fo(i, 8){
-        cost = 0;
-        fo(j, 9){
-            cost += abs(possible[i][j]-arr[j]);
-        }
-        mincost = min(mincost, cost);
+    vector<string> arr;
+    string s;
+    fo(i, n){
+        ci(s);
+        arr.push_back(s);
     }
-
-    cout << mincost;
+    sort(all(arr), compare);
+    foa(x, arr) cout << x << endl;
 }
 
 int main(){

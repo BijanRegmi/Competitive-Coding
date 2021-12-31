@@ -25,31 +25,24 @@ typedef vector<string>      vs;
 typedef map<int, int>       mii;
 
 void solve(){
-    int arr[9];
-    fo(i, 9) ci(arr[i]);
+    string s;
+    ci(s);
 
-    int possible[8][9] = {
-        {4, 3, 8, 9, 5, 1, 2, 7, 6},
-        {8, 3, 4, 1, 5, 9, 6, 7, 2},
-        {8, 1, 6, 3, 5, 7, 4, 9, 2},
-        {4, 9, 2, 3, 5, 7, 8, 1, 6},
-        {2, 7, 6, 9, 5, 1, 4, 3, 8},
-        {6, 7, 2, 1, 5, 9, 8, 3, 4},
-        {6, 1, 8, 7, 5, 3, 2, 9, 4},
-        {2, 9, 4, 7, 5, 3, 6, 1, 8}
-    };
+    int n=s.length();
 
-    int mincost = 1000, cost;
-
-    fo(i, 8){
-        cost = 0;
-        fo(j, 9){
-            cost += abs(possible[i][j]-arr[j]);
+    char lastread = '!', curr;
+    fo(i, n){
+        curr = s[i];
+        if (lastread==curr){
+            s.erase(i-1, 2);
+            n=s.length();
+            i=-1;
+            lastread='!';
+        } else {
+            lastread=curr;
         }
-        mincost = min(mincost, cost);
     }
-
-    cout << mincost;
+    if (s=="") cout << "Empty String"; else cout << s;
 }
 
 int main(){
