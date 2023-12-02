@@ -42,7 +42,7 @@ fn determine_first_p2(line: &str) -> u32 {
 
 fn determine_last_p2(line: &str) -> u32 {
     let mut j = line.len() - 1;
-    while j >= 0 {
+    loop {
         let x = line.chars().nth(j).unwrap().to_digit(10);
         if let Some(digit) = x {
             return digit;
@@ -61,7 +61,6 @@ fn determine_last_p2(line: &str) -> u32 {
         }
         j -= 1;
     }
-    return 0;
 }
 
 pub fn day1() {
