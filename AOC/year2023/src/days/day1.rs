@@ -1,5 +1,3 @@
-use std::fs;
-
 fn determine_first_p1(line: &str) -> u32 {
     line.chars()
         .find(|c| c.is_digit(10))
@@ -63,19 +61,16 @@ fn determine_last_p2(line: &str) -> u32 {
     }
 }
 
-pub fn day1() {
-    println!("Day 1");
-    let inputs = fs::read_to_string("src/inputs/day1").expect("Must have input file");
-
-    let part_one_output: u32 = inputs
+pub fn day1(input: &str) -> [u32; 2] {
+    let part_one_output: u32 = input
         .lines()
         .map(|s| determine_first_p1(s) * 10 + determine_last_p1(s))
         .sum();
-    dbg!(part_one_output);
 
-    let part_two_output: u32 = inputs
+    let part_two_output: u32 = input
         .lines()
         .map(|s| determine_first_p2(s) * 10 + determine_last_p2(s))
         .sum();
-    dbg!(part_two_output);
+
+    return [part_one_output, part_two_output];
 }

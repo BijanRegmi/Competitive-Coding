@@ -1,5 +1,3 @@
-use std::fs;
-
 #[derive(Debug)]
 struct Pool {
     red: u32,
@@ -13,17 +11,14 @@ struct Game {
     pools: Vec<Pool>,
 }
 
-pub fn day2() {
-    println!("Day 2");
-    let inputs = fs::read_to_string("src/inputs/day2").expect("Must have input file");
-
+pub fn day2(input: &str) -> [u32; 2] {
     let limits = Pool {
         red: 12,
         green: 13,
         blue: 14,
     };
 
-    let games = inputs
+    let games = input
         .lines()
         .enumerate()
         .map(|(idx, line)| {
@@ -65,7 +60,6 @@ pub fn day2() {
         })
         .map(|game| game.id)
         .sum::<u32>();
-    dbg!(part_one_output);
 
     let part_two_output = games
         .iter()
@@ -85,5 +79,6 @@ pub fn day2() {
             r * g * b
         })
         .sum::<u32>();
-    dbg!(part_two_output);
+
+    return [part_one_output, part_two_output];
 }
