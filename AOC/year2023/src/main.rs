@@ -12,6 +12,9 @@ fn main() {
 
     println!("AOC Day {}", day);
 
+    use std::time::Instant;
+    let now = Instant::now();
+
     let output_u32 = match day {
         "1" => days::day1(&input),
         "2" => days::day2(&input),
@@ -23,6 +26,8 @@ fn main() {
     if output_u32[0] != 0 && output_u32[1] != 0 {
         println!("Part_One: {}", output_u32[0]);
         println!("Part_Two: {}", output_u32[1]);
+        let elapsed = now.elapsed();
+        println!("Time: {:.2?}", elapsed);
     }
 
     let output_u64 = match day {
@@ -33,5 +38,7 @@ fn main() {
     if output_u64[0] != 0 && output_u64[1] != 0 {
         println!("Part_One: {}", output_u64[0]);
         println!("Part_Two: {}", output_u64[1]);
+        let elapsed = now.elapsed();
+        println!("Time: {:.2?}", elapsed);
     }
 }

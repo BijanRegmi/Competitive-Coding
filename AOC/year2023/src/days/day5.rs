@@ -1,132 +1,91 @@
-use std::collections::HashMap;
+use std::cmp::min;
 
 #[derive(Debug)]
-struct Entry {
-    target: u64,
-    source: u64,
+struct Mapping {
+    input: u64,
+    output: u64,
     range: u64,
 }
 
-#[derive(Debug)]
-struct ConversionMap {
-    destination: String,
-    entries: Vec<Entry>,
-}
+fn transform(ranges: &mut Vec<(u64, u64)>, maps: &Vec<Vec<Mapping>>) {
+    for map in maps.iter() {
+        let mut new_ranges: Vec<(u64, u64)> = vec![];
+        ranges.iter().for_each(|r| {
+            let mut begin = r.0;
+            let mut end: u64;
+            loop {
+                if begin >= r.1 {
+                    break;
+                }
 
-impl ConversionMap {
-    fn get_target(&self, source: u64) -> Option<&Entry> {
-        self.entries
-            .iter()
-            .find(|&e| source >= e.source && source < e.source + e.range)
+                let found_map = map
+                    .iter()
+                    .find(|m| m.input <= begin && begin < m.input + m.range);
+                match found_map {
+                    Some(mp) => {
+                        end = min(mp.input + mp.range, r.1);
+                        new_ranges
+                            .push((mp.output + (begin - mp.input), mp.output + (end - mp.input)));
+                    }
+                    None => {
+                        end = r.1;
+                        new_ranges.push((begin, end));
+                    }
+                };
+                begin = end;
+            }
+        });
+        *ranges = new_ranges;
     }
 }
 
 pub fn day5(input: &str) -> [u64; 2] {
-    let lines: Vec<&str> = input.lines().collect();
+    let mut chunks = input.split("\n\n");
 
-    let mut map: HashMap<&str, ConversionMap> = HashMap::new();
-
-    let seeds: Vec<u64> = lines[0]
+    let seeds = chunks
+        .next()
+        .unwrap()
         .split(": ")
         .nth(1)
         .unwrap()
         .split_whitespace()
-        .filter_map(|n| n.parse::<u64>().ok())
-        .collect();
+        .map(str::parse::<u64>)
+        .map_while(Result::ok)
+        .collect::<Vec<_>>();
 
-    let mut src_dest = ["", ""];
-    for &line in lines.iter().skip(2) {
-        if src_dest[0].is_empty() {
-            let arr: Vec<&str> = line.split("-to-").collect();
-            src_dest[0] = arr[0];
-            src_dest[1] = arr[1].split_whitespace().nth(0).unwrap();
-            continue;
-        }
-        if line.trim().is_empty() {
-            src_dest = ["", ""];
-            continue;
-        }
-
-        let nums = line
-            .split_whitespace()
-            .filter_map(|n| n.parse::<u64>().ok())
-            .collect::<Vec<u64>>();
-
-        let conv_map = map.get_mut(src_dest[0]);
-        match conv_map {
-            Some(m) => m.entries.push(Entry {
-                target: nums[0],
-                source: nums[1],
-                range: nums[2],
-            }),
-            None => {
-                map.insert(
-                    src_dest[0],
-                    ConversionMap {
-                        destination: src_dest[1].to_string(),
-                        entries: vec![Entry {
-                            target: nums[0],
-                            source: nums[1],
-                            range: nums[2],
-                        }],
-                    },
-                );
-            }
-        };
-    }
-
-    let part_one_answer = seeds
-        .iter()
-        .map(|&seed| {
-            let mut current_key = "seed";
-            let mut source = seed;
-            loop {
-                let m = map.get(current_key).unwrap();
-                let matched_entry = m.get_target(source);
-                source = match matched_entry {
-                    Some(entry) => entry.target + (source - entry.source),
-                    None => source,
-                };
-                if m.destination == "location" {
-                    break;
-                }
-                current_key = &m.destination;
-            }
-            source
-        })
-        .min()
-        .unwrap();
-
-    dbg!(part_one_answer);
-
-    let part_two_answer = seeds
-        .chunks(2)
-        .map(|seed| {
-            let mut min = seed[0];
-            let mut it = seed[0]..seed[0] + seed[1];
-            while let Some(s) = it.next() {
-                let mut current_key = "seed";
-                let mut source = s;
-                loop {
-                    let m = map.get(current_key).unwrap();
-                    let matched_entry = m.get_target(source);
-                    source = match matched_entry {
-                        Some(entry) => entry.target + (source - entry.source),
-                        None => source,
-                    };
-                    if m.destination == "location" {
-                        break;
+    let maps = chunks
+        .map(|chunk| {
+            chunk
+                .split("\n")
+                .skip(1)
+                .filter_map(|line| {
+                    if line.is_empty() {
+                        None
+                    } else {
+                        let mappings = line
+                            .split_whitespace()
+                            .map(str::parse::<u64>)
+                            .map_while(Result::ok)
+                            .collect::<Vec<_>>();
+                        Some(Mapping {
+                            output: mappings[0],
+                            input: mappings[1],
+                            range: mappings[2],
+                        })
                     }
-                    current_key = &m.destination;
-                }
-                if source < min {
-                    min = source;
-                }
-            }
-            min
+                })
+                .collect::<Vec<_>>()
         })
-        .min()
-        .unwrap();
+        .collect::<Vec<_>>();
+
+    let mut part_one_ranges: Vec<(u64, u64)> = seeds.iter().map(|&s| (s, s + 1)).collect();
+    let mut part_two_ranges: Vec<(u64, u64)> =
+        seeds.chunks(2).map(|s| (s[0], s[0] + s[1])).collect();
+    transform(&mut part_one_ranges, &maps);
+    transform(&mut part_two_ranges, &maps);
+
+    let part_one_answer = part_one_ranges.iter().map(|r| r.0).min().unwrap();
+    let part_two_answer = part_two_ranges.iter().map(|r| r.0).min().unwrap();
 
     return [part_one_answer, part_two_answer];
 }
