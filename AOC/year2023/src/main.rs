@@ -20,6 +20,7 @@ fn main() {
         "2" => days::day2(&input),
         "3" => days::day3(&input),
         "4" => days::day4(&input),
+        "6" => days::day6(&input),
         &_ => [0, 0],
     };
 
