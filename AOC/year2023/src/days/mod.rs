@@ -1,15 +1,9 @@
-mod day1;
-mod day2;
-mod day3;
-mod day4;
-mod day5;
-mod day6;
-mod day7;
+mod day_template;
 
-pub use day1::day1;
-pub use day2::day2;
-pub use day3::day3;
-pub use day4::day4;
-pub use day5::day5;
-pub use day6::day6;
-pub use day7::day7;
+pub mod day1;
+pub mod day2;
+pub mod day3;
+pub mod day4;
+pub mod day5;
+pub mod day6;
+pub mod day7;

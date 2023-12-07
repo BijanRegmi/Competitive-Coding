@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
-fn part_one(input: &str) -> u32 {
+type ParseResult<'a> = &'a str;
+
+fn part_one(input: ParseResult) -> u32 {
     let mut sum: u32 = 0;
 
     let lines = input.lines().collect::<Vec<&str>>();
@@ -92,7 +94,7 @@ fn part_one(input: &str) -> u32 {
     return sum;
 }
 
-fn part_two(input: &str) -> u32 {
+fn part_two(input: ParseResult) -> u32 {
     let lines = input.lines().collect::<Vec<&str>>();
     let line_len: usize = lines[0].len();
 
@@ -202,12 +204,22 @@ fn part_two(input: &str) -> u32 {
         .sum::<u32>()
 }
 
-pub fn day3(input: &str) -> [u32; 2] {
-    return [part_one(input), part_two(input)];
+fn parse(input: &str, _part: u8) -> ParseResult {
+    input
+}
+
+pub fn run(input: &str) {
+    let part_one_answer = part_one(&parse(input, 1));
+    let part_two_answer = part_two(&parse(input, 2));
+
+    println!("Part One: {part_one_answer}");
+    println!("Part Two: {part_two_answer}");
 }
 
 #[cfg(test)]
 mod test {
+    use super::{parse, part_one, part_two};
+
     const INPUT: &str = "467..114..
 ...*......
 ..35..633.
@@ -220,10 +232,16 @@ mod test {
 .664.598..";
 
     #[test]
-    fn day3() {
-        let [part1, part2] = super::day3(INPUT);
+    fn part_one_test() {
+        let expected = 4361;
+        let output = part_one(&parse(INPUT, 1));
+        assert_eq!(expected, output);
+    }
 
-        assert_eq!(part1, 4361);
-        assert_eq!(part2, 467835);
+    #[test]
+    fn part_two_test() {
+        let expected = 467835;
+        let output = part_two(&parse(INPUT, 2));
+        assert_eq!(expected, output);
     }
 }

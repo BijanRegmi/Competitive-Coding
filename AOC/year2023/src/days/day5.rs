@@ -7,6 +7,8 @@ struct Mapping {
     range: u64,
 }
 
+type ParseResult = (Vec<u64>, Vec<Vec<Mapping>>);
+
 fn transform(ranges: &mut Vec<(u64, u64)>, maps: &Vec<Vec<Mapping>>) {
     for map in maps.iter() {
         let mut new_ranges: Vec<(u64, u64)> = vec![];
@@ -39,7 +41,20 @@ fn transform(ranges: &mut Vec<(u64, u64)>, maps: &Vec<Vec<Mapping>>) {
     }
 }
 
-pub fn day5(input: &str) -> [u64; 2] {
+fn part_two((seeds, maps): &ParseResult) -> u64 {
+    let mut part_two_ranges: Vec<(u64, u64)> =
+        seeds.chunks(2).map(|s| (s[0], s[0] + s[1])).collect();
+    transform(&mut part_two_ranges, &maps);
+    part_two_ranges.iter().map(|r| r.0).min().unwrap()
+}
+
+fn part_one((seeds, maps): &ParseResult) -> u64 {
+    let mut part_one_ranges: Vec<(u64, u64)> = seeds.iter().map(|&s| (s, s + 1)).collect();
+    transform(&mut part_one_ranges, &maps);
+    part_one_ranges.iter().map(|r| r.0).min().unwrap()
+}
+
+fn parse(input: &str, _part: u8) -> ParseResult {
     let mut chunks = input.split("\n\n");
 
     let seeds = chunks
@@ -78,20 +93,22 @@ pub fn day5(input: &str) -> [u64; 2] {
         })
         .collect::<Vec<_>>();
 
-    let mut part_one_ranges: Vec<(u64, u64)> = seeds.iter().map(|&s| (s, s + 1)).collect();
-    let mut part_two_ranges: Vec<(u64, u64)> =
-        seeds.chunks(2).map(|s| (s[0], s[0] + s[1])).collect();
-    transform(&mut part_one_ranges, &maps);
-    transform(&mut part_two_ranges, &maps);
+    (seeds, maps)
+}
 
-    let part_one_answer = part_one_ranges.iter().map(|r| r.0).min().unwrap();
-    let part_two_answer = part_two_ranges.iter().map(|r| r.0).min().unwrap();
+pub fn run(input: &str) {
+    let parsed = parse(input, 0);
+    let part_one_answer = part_one(&parsed);
+    let part_two_answer = part_two(&parsed);
 
-    return [part_one_answer, part_two_answer];
+    println!("Part One: {part_one_answer}");
+    println!("Part Two: {part_two_answer}");
 }
 
 #[cfg(test)]
 mod test {
+    use super::{parse, part_one, part_two};
+
     const INPUT: &str = "seeds: 79 14 55 13
 
 seed-to-soil map:
@@ -127,10 +144,16 @@ humidity-to-location map:
 56 93 4";
 
     #[test]
-    fn day5() {
-        let [part1, part2] = super::day5(INPUT);
+    fn part_one_test() {
+        let expected = 35;
+        let output = part_one(&parse(INPUT, 1));
+        assert_eq!(expected, output);
+    }
 
-        assert_eq!(part1, 35);
-        assert_eq!(part2, 46);
+    #[test]
+    fn part_two_test() {
+        let expected = 46;
+        let output = part_two(&parse(INPUT, 2));
+        assert_eq!(expected, output);
     }
 }

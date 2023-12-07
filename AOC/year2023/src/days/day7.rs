@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, collections::HashMap};
+use std::{cmp::Ordering, collections::HashMap, u32};
 
 #[derive(Copy, Clone, Debug)]
 enum HandType {
@@ -18,7 +18,9 @@ struct Hand {
     hand_type: HandType,
 }
 
-fn get_hand_type(hand: &str) -> HandType {
+type ParseResult = Vec<Hand>;
+
+fn get_hand_type_part_one(hand: &str) -> HandType {
     let mut histogram = HashMap::<char, u32>::new();
 
     hand.chars().for_each(|c| {
@@ -51,7 +53,7 @@ fn get_hand_type(hand: &str) -> HandType {
 
 fn get_hand_type_part_two(hand: &str) -> HandType {
     if !hand.contains('J') {
-        return get_hand_type(&hand);
+        return get_hand_type_part_one(&hand);
     }
 
     let mut histogram = HashMap::<char, u32>::new();
@@ -93,7 +95,7 @@ fn get_hand_type_part_two(hand: &str) -> HandType {
     }
 }
 
-pub fn day7(input: &str) -> [u32; 2] {
+fn part_one(input: &mut ParseResult) -> u32 {
     let strengths: HashMap<char, u32> = HashMap::from([
         ('A', 14),
         ('K', 13),
@@ -110,19 +112,7 @@ pub fn day7(input: &str) -> [u32; 2] {
         ('2', 2),
     ]);
 
-    let mut hands = input
-        .lines()
-        .map(|line| {
-            let x = line.split_whitespace().collect::<Vec<_>>();
-            Hand {
-                hand: x[0].to_string(),
-                bid: x[1].parse::<u32>().unwrap_or(0),
-                hand_type: get_hand_type(x[0]),
-            }
-        })
-        .collect::<Vec<_>>();
-
-    hands.sort_by(|a, b| {
+    input.sort_by(|a, b| {
         let a_val = a.hand_type as u32;
         let b_val = b.hand_type as u32;
         if a_val < b_val {
@@ -142,25 +132,31 @@ pub fn day7(input: &str) -> [u32; 2] {
         }
     });
 
-    let part_one_answer: u32 = hands
+    input
         .iter()
         .enumerate()
         .map(|(idx, h)| (idx + 1) as u32 * h.bid)
-        .sum();
+        .sum::<u32>()
+}
 
-    let mut hands_part_two = input
-        .lines()
-        .map(|line| {
-            let x = line.split_whitespace().collect::<Vec<_>>();
-            Hand {
-                hand: x[0].to_string(),
-                bid: x[1].parse::<u32>().unwrap_or(0),
-                hand_type: get_hand_type_part_two(x[0]),
-            }
-        })
-        .collect::<Vec<_>>();
+fn part_two(input: &mut ParseResult) -> u32 {
+    let strengths: HashMap<char, u32> = HashMap::from([
+        ('A', 14),
+        ('K', 13),
+        ('Q', 12),
+        ('J', 11),
+        ('T', 10),
+        ('9', 9),
+        ('8', 8),
+        ('7', 7),
+        ('6', 6),
+        ('5', 5),
+        ('4', 4),
+        ('3', 3),
+        ('2', 2),
+    ]);
 
-    hands_part_two.sort_by(|a, b| {
+    input.sort_by(|a, b| {
         let a_val = a.hand_type as u32;
         let b_val = b.hand_type as u32;
         if a_val < b_val {
@@ -187,17 +183,43 @@ pub fn day7(input: &str) -> [u32; 2] {
         }
     });
 
-    let part_two_answer: u32 = hands_part_two
+    input
         .iter()
         .enumerate()
         .map(|(idx, h)| (idx + 1) as u32 * h.bid)
-        .sum();
+        .sum::<u32>()
+}
 
-    return [part_one_answer, part_two_answer];
+fn parse(input: &str, part: u8) -> ParseResult {
+    input
+        .lines()
+        .map(|line| {
+            let x = line.split_whitespace().collect::<Vec<_>>();
+            Hand {
+                hand: x[0].to_string(),
+                bid: x[1].parse::<u32>().unwrap_or(0),
+                hand_type: if part == 1 {
+                    get_hand_type_part_one(x[0])
+                } else {
+                    get_hand_type_part_two(x[0])
+                },
+            }
+        })
+        .collect::<Vec<_>>()
+}
+
+pub fn run(input: &str) {
+    let part_one_answer = part_one(&mut parse(input, 1));
+    let part_two_answer = part_two(&mut parse(input, 2));
+
+    println!("Part One: {part_one_answer}");
+    println!("Part Two: {part_two_answer}");
 }
 
 #[cfg(test)]
 mod test {
+    use super::{parse, part_one, part_two};
+
     const INPUT: &str = "32T3K 765
 T55J5 684
 KK677 28
@@ -205,10 +227,16 @@ KTJJT 220
 QQQJA 483";
 
     #[test]
-    fn day7() {
-        let [part1, part2] = super::day7(INPUT);
+    fn part_one_test() {
+        let expected = 6440;
+        let output = part_one(&mut parse(INPUT, 1));
+        assert_eq!(expected, output);
+    }
 
-        assert_eq!(part1, 6440);
-        assert_eq!(part2, 5905);
+    #[test]
+    fn part_two_test() {
+        let expected = 5905;
+        let output = part_two(&mut parse(INPUT, 2));
+        assert_eq!(expected, output);
     }
 }

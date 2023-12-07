@@ -1,3 +1,9 @@
+type ParseResult<'a> = &'a str;
+
+const NUMS: [&str; 9] = [
+    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+];
+
 fn determine_first_p1(line: &str) -> u32 {
     line.chars()
         .find(|c| c.is_digit(10))
@@ -12,10 +18,6 @@ fn determine_last_p1(line: &str) -> u32 {
         .map(|c| c.to_digit(10).unwrap_or(0))
         .unwrap_or(0)
 }
-
-const NUMS: [&str; 9] = [
-    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-];
 
 fn determine_first_p2(line: &str) -> u32 {
     let mut i = 0;
@@ -61,16 +63,49 @@ fn determine_last_p2(line: &str) -> u32 {
     }
 }
 
-pub fn day1(input: &str) -> [u32; 2] {
-    let part_one_output: u32 = input
+fn part_one(input: &ParseResult) -> u32 {
+    input
         .lines()
         .map(|s| determine_first_p1(s) * 10 + determine_last_p1(s))
-        .sum();
+        .sum()
+}
 
-    let part_two_output: u32 = input
+fn part_two(input: &ParseResult) -> u32 {
+    input
         .lines()
         .map(|s| determine_first_p2(s) * 10 + determine_last_p2(s))
-        .sum();
+        .sum()
+}
 
-    return [part_one_output, part_two_output];
+fn parse(input: &str, _part: u8) -> ParseResult {
+    input
+}
+
+pub fn run(input: &str) {
+    let part_one_answer = part_one(&parse(input, 1));
+    let part_two_answer = part_two(&parse(input, 2));
+
+    println!("Part One: {part_one_answer}");
+    println!("Part Two: {part_two_answer}");
+}
+
+#[cfg(test)]
+mod test {
+    use super::{parse, part_one, part_two};
+
+    const INPUT: &str = "";
+
+    #[test]
+    fn part_one_test() {
+        let expected = 0;
+        let output = part_one(&parse(INPUT, 1));
+        assert_eq!(expected, output);
+    }
+
+    #[test]
+    fn part_two_test() {
+        let expected = 0;
+        let output = part_two(&parse(INPUT, 2));
+        assert_eq!(expected, output);
+    }
 }
