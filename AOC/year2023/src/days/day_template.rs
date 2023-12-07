@@ -8,7 +8,7 @@ mod test {
 
     #[test]
     fn dayn() {
-        let [part1, part2] = super::day3(INPUT);
+        let [part1, part2] = super::dayn(INPUT);
 
         assert_eq!(part1, 0);
         assert_eq!(part2, 0);
