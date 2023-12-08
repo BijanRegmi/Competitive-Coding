@@ -23,6 +23,7 @@ fn main() {
         "5" => days::day5::run(&input),
         "6" => days::day6::run(&input),
         "7" => days::day7::run(&input),
+        "8" => days::day8::run(&input),
         &_ => unimplemented!(),
     }
 
