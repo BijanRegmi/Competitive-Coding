@@ -16,9 +16,9 @@ fn parse(input: &str, part: u8) -> ParseResult {
 
 pub fn run(input: &str) {
     let part_one_answer = part_one(&parse(input, 1));
-    let part_two_answer = part_two(&parse(input, 2));
-
     println!("Part One: {part_one_answer}");
+
+    let part_two_answer = part_two(&parse(input, 2));
     println!("Part Two: {part_two_answer}");
 }
 
