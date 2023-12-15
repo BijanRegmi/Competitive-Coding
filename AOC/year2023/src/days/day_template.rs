@@ -2,11 +2,11 @@
 
 type ParseResult<'a> = &'a str;
 
-fn part_one(input: &ParseResult) -> u32 {
+fn part_one(input: &ParseResult) -> u64 {
     0
 }
 
-fn part_two(input: &ParseResult) -> u32 {
+fn part_two(input: &ParseResult) -> u64 {
     0
 }
 
