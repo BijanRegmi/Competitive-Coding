@@ -1,7 +1,4 @@
-use std::{
-    cmp,
-    collections::{HashMap, VecDeque},
-};
+use std::collections::{HashMap, VecDeque};
 
 type ParseResult = Vec<Vec<char>>;
 
@@ -109,7 +106,7 @@ fn part_two(input: &ParseResult) -> u64 {
     *(vec![t, b, l, r]).iter().max().unwrap()
 }
 
-fn parse(input: &str, part: u8) -> ParseResult {
+fn parse(input: &str, _part: u8) -> ParseResult {
     input.lines().map(|line| line.chars().collect()).collect()
 }
 
