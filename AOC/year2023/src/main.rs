@@ -33,6 +33,7 @@ fn main() {
         "15" => days::day15::run(&input),
         "16" => days::day16::run(&input),
         "17" => days::day17::run(&input),
+        "18" => days::day18::run(&input),
         &_ => unimplemented!(),
     }
 
