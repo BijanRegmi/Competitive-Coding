@@ -10,13 +10,13 @@ function parseRawInput(rawInput: string): ParseResult {
   return rawInput;
 }
 
-function part1(rawInput: string): string {
+function part1(rawInput: string) {
   const input = parseRawInput(rawInput);
 
   return input;
 }
 
-function part2(rawInput: string): string {
+function part2(rawInput: string) {
   const input = parseRawInput(rawInput);
 
   return input;

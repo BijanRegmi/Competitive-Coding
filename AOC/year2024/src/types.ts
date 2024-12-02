@@ -1,17 +1,17 @@
 export type TestCases = {
   part1: {
     input: string;
-    expectedOutput: string;
+    expectedOutput: any;
   }[];
   part2: {
     input: string;
-    expectedOutput: string;
+    expectedOutput: any;
   }[];
 };
 
 export type Solution = {
-  part1: (input: string) => string;
-  part2: (input: string) => string;
+  part1: (input: string) => any;
+  part2: (input: string) => any;
   testCases: TestCases;
 };
 

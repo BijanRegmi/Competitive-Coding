@@ -31,7 +31,7 @@ async function main() {
 
   const src_file = `./days/day${day}`;
 
-  if (!fs.existsSync(src_file)) {
+  if (!fs.existsSync(path.resolve(__dirname, `${src_file}.ts`))) {
     console.error(`Source file ${src_file}.ts does not exist`);
     process.exit(1);
   }
