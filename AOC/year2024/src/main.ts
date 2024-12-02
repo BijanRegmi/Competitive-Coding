@@ -65,7 +65,7 @@ async function main() {
         for (let i = 0; i < testCases.part2.length; i++) {
           const { input, expectedOutput } = testCases.part2[i];
           const now = performance.now();
-          const output = module.part1(input);
+          const output = module.part2(input);
           const elapesed = performance.now() - now;
           stats.push({
             part: 2,
@@ -103,7 +103,7 @@ async function main() {
 
       if (execP2) {
         const now = performance.now();
-        const answer = module.part1(inputText);
+        const answer = module.part2(inputText);
         const elapesed = performance.now() - now;
         stats.push({
           part: 2,
