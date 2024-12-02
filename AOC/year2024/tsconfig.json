@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "baseUrl": ".",
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "strict": true,
+    "types": ["node"],
+  },
+  "include": ["src/**/*.ts"],
+}
