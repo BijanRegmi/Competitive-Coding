@@ -6,18 +6,18 @@ const testCases: TestCases = {
   part2: [{ input: "1", expectedOutput: "1" }],
 };
 
-function parseInput(input: string): ParseResult {
+function parseRawInput(rawInput: string): ParseResult {
+  return rawInput;
+}
+
+function part1(rawInput: string): string {
+  const input = parseRawInput(rawInput);
+
   return input;
 }
 
-function part1(content: string): string {
-  const input = parseInput(content);
-
-  return input;
-}
-
-function part2(content: string): string {
-  const input = parseInput(content);
+function part2(rawInput: string): string {
+  const input = parseRawInput(rawInput);
 
   return input;
 }
