@@ -1,31 +1,6 @@
 import { Solution, TestCases } from "../types";
 type ParseResult = { left: number[]; right: number[] };
 
-const testCases: TestCases = {
-  part1: [
-    {
-      input: `3   4
-4   3
-2   5
-1   3
-3   9
-3   3`,
-      expectedOutput: 11,
-    },
-  ],
-  part2: [
-    {
-      input: `3   4
-4   3
-2   5
-1   3
-3   9
-3   3`,
-      expectedOutput: 31,
-    },
-  ],
-};
-
 function parseRawInput(rawInput: string): ParseResult {
   const input: ParseResult = {
     left: [],
@@ -67,6 +42,31 @@ function part2(rawInput: string) {
 
   return score;
 }
+
+const testCases: TestCases = {
+  part1: [
+    {
+      input: `3   4
+4   3
+2   5
+1   3
+3   9
+3   3`,
+      expectedOutput: 11,
+    },
+  ],
+  part2: [
+    {
+      input: `3   4
+4   3
+2   5
+1   3
+3   9
+3   3`,
+      expectedOutput: 31,
+    },
+  ],
+};
 
 const solution: Solution = {
   part1,
