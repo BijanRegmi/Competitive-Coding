@@ -7,7 +7,7 @@ function sliceString(input: string): string {
 }
 
 function parseTime(ms: number): number {
-  return Math.round(ms);
+  return ms;
 }
 
 async function main() {
