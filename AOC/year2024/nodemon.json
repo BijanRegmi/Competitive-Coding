@@ -1,5 +1,5 @@
 {
   "watch": ["src", ".env"],
   "ext": "ts,inp",
-  "exec": "ts-node src/main.ts"
+  "exec": "bun src/main.ts"
 }
