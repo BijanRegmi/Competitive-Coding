@@ -3,7 +3,8 @@ import path from "path";
 import { Solution, Status } from "./types";
 
 function sliceString(input: string): string {
-  return input.length > 100 ? `${input.slice(0, 100)}...` : input;
+  const x = input.length > 100 ? `${input.slice(0, 100)}...` : input;
+  return x.replaceAll("\n", "\\n");
 }
 
 function parseTime(ms: number): number {
@@ -44,15 +45,17 @@ async function main() {
     if (testMode) {
       const testCases = module.testCases;
       if (execP1) {
+        const hasEnabled = testCases.part1.some((t) => t.enabled !== undefined);
         for (let i = 0; i < testCases.part1.length; i++) {
-          const { input, expectedOutput } = testCases.part1[i];
+          const { input, expectedOutput, enabled } = testCases.part1[i];
+          if (hasEnabled && !enabled) continue;
           const now = performance.now();
           const output = module.part1(input);
           const elapesed = performance.now() - now;
           stats.push({
             part: 1,
             case: i + 1,
-            input: input.length > 100 ? `${input.slice(0, 100)}...` : input,
+            input: sliceString(input),
             output,
             expectedOutput,
             passed: output === expectedOutput,
@@ -62,15 +65,17 @@ async function main() {
       }
 
       if (execP2) {
+        const hasEnabled = testCases.part2.some((t) => t.enabled !== undefined);
         for (let i = 0; i < testCases.part2.length; i++) {
-          const { input, expectedOutput } = testCases.part2[i];
+          const { input, expectedOutput, enabled } = testCases.part2[i];
+          if (hasEnabled && !enabled) continue;
           const now = performance.now();
           const output = module.part2(input);
           const elapesed = performance.now() - now;
           stats.push({
             part: 2,
             case: i + 1,
-            input: input.length > 100 ? `${input.slice(0, 100)}...` : input,
+            input: sliceString(input),
             output,
             expectedOutput,
             passed: output === expectedOutput,

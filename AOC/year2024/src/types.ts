@@ -2,10 +2,12 @@ export type TestCases = {
   part1: {
     input: string;
     expectedOutput: any;
+    enabled?: boolean
   }[];
   part2: {
     input: string;
     expectedOutput: any;
+    enabled?: boolean
   }[];
 };
 
