@@ -11,9 +11,13 @@ function nums(s: string) {
 
 const C = 101;
 const R = 103;
+const mx = (C - 1) / 2;
+const my = (R - 1) / 2;
 
 function part1(rawInput: string) {
   const input = parseRawInput(rawInput);
+
+  const t = 100;
   let qpp = 0,
     qpn = 0,
     qnn = 0,
@@ -21,19 +25,16 @@ function part1(rawInput: string) {
 
   for (let robot of input) {
     const [px, py, vx, vy] = nums(robot);
-    const t = 100;
+
     let sx = (px + t * vx) % C;
     let sy = (py + t * vy) % R;
     if (sx < 0) sx += C;
     if (sy < 0) sy += R;
 
-    const nx = sx - (C - 1) / 2;
-    const ny = -(sy - (R - 1) / 2);
-
-    if (nx > 0 && ny > 0) qpp++;
-    else if (nx > 0 && ny < 0) qpn++;
-    else if (nx < 0 && ny < 0) qnn++;
-    else if (nx < 0 && ny > 0) qnp++;
+    if (sx > mx && sy > my) qpp++;
+    else if (sx > mx && sy < my) qpn++;
+    else if (sx < mx && sy < my) qnn++;
+    else if (sx < mx && sy > my) qnp++;
   }
 
   return qpp * qpn * qnn * qnp;
@@ -44,6 +45,7 @@ function part2(rawInput: string) {
 
   let minSafetyFactor = Infinity;
   let minT = 0;
+  let tree: string[][] = [];
 
   let t = 0;
   while (t < R * C) {
@@ -52,6 +54,10 @@ function part2(rawInput: string) {
       qnn = 0,
       qnp = 0;
 
+    const map = Array.from({ length: R }).map(() =>
+      Array.from({ length: C }).map(() => " "),
+    );
+
     for (let robot of input) {
       const [px, py, vx, vy] = nums(robot);
       let sx = (px + t * vx) % C;
@@ -59,23 +65,25 @@ function part2(rawInput: string) {
       if (sx < 0) sx += C;
       if (sy < 0) sy += R;
 
-      const nx = sx - (C - 1) / 2;
-      const ny = -(sy - (R - 1) / 2);
+      map[sy][sx] = "*";
 
-      if (nx > 0 && ny > 0) qpp++;
-      else if (nx > 0 && ny < 0) qpn++;
-      else if (nx < 0 && ny < 0) qnn++;
-      else if (nx < 0 && ny > 0) qnp++;
+      if (sx > mx && sy > my) qpp++;
+      else if (sx > mx && sy < my) qpn++;
+      else if (sx < mx && sy < my) qnn++;
+      else if (sx < mx && sy > my) qnp++;
     }
 
     const safetyFactor = qpp * qpn * qnn * qnp;
     if (safetyFactor < minSafetyFactor) {
       minSafetyFactor = safetyFactor;
       minT = t;
+      tree = map;
     }
 
     t++;
   }
+
+  console.log(tree.map((t) => t.join("")).join("\n"));
 
   return minT;
 }
