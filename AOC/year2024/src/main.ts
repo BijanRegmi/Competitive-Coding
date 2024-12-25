@@ -29,6 +29,7 @@ async function main() {
   const execP2 = partFlagExists ? p2Flag : true;
 
   const testMode = args.includes("-t");
+  process.env.TEST_MODE = testMode ? "t" : "f";
 
   const src_file = `./days/day${day}`;
 
